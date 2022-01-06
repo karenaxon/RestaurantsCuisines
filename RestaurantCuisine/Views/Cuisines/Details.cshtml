@@ -1,0 +1,41 @@
+@{
+  Layout = "_Layout";
+}
+
+@model RestaurantsCuisines.Models.Cuisine
+
+<h2>Cuisine Details</h2>
+<hr />
+<h3>@Html.DisplayNameFor(model => model.Description): @Html.DisplayFor(model => model.Description)</h3>
+
+@if(@Model.JoinEntities.Count == 0)
+{
+  <p>This cuisine does not belong to any restaurants</p>
+}
+else
+{
+  <h4>This cuisine can be found at these restaurants:</h4>
+  <ul>
+  @foreach(var join in Model.JoinEntities)
+  {
+    <li>@join.Restaurant.Name</li>
+  }
+  </ul>
+}
+
+<p>@Html.ActionLink("Back to list", "Index")</p>
+<p>@Html.ActionLink("Edit Cuisine", "Edit", new { id = Model.CuisineId })</p>
+<p>@Html.ActionLink("Delete Cuisine", "Delete", new { id = Model.CuisineId })</p> 
+<p>@Html.ActionLink("Add a Restaurant", "AddRestaurant", new { id = Model.CuisineId })</p>
+
+<ul>
+@foreach(var join in Model.JoinEntities)
+{
+  <li>@join.Restaurant.Name</li>
+  @using (Html.BeginForm("DeleteRestaurant", "Cuisines"))
+  {
+    @Html.Hidden("joinId", @join.RestaurantCuisineId)
+    <input type="submit" value="Delete"/>
+  }
+}
+</ul>
